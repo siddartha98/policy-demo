@@ -53,7 +53,7 @@ function TechBadges() {
                 <svg style={iconStyle} viewBox="0 0 24 24" fill="none" aria-hidden focusable="false">
                     <path d="M12 2v20M2 12h20" stroke="#f59e0b" strokeWidth="1.2" strokeLinecap="round" />
                 </svg>
-                In-Browser Babel
+                In-Browser UI
             </div>
         </div>
     );
