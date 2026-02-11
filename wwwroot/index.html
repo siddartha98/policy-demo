@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Policy Demo</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+        body {
+            font-family: Segoe UI, Roboto, Arial, sans-serif;
+            margin: 24px;
+            color: #222;
+        }
+
+        h2 {
+            margin-bottom: 12px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+
+        th, td {
+            padding: 8px 10px;
+            text-align: left;
+            border-bottom: 1px solid #e6e6e6;
+        }
+
+        th {
+            background: #f7f7f7;
+            font-weight: 600;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            color: #fff;
+            display: inline-block;
+        }
+
+            .badge.active {
+                background: #2d9cdb;
+            }
+
+            .badge.cancelled {
+                background: #e04b4b;
+            }
+
+        button {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+            button.cancel {
+                background: #e04b4b;
+                color: #fff;
+            }
+
+            button.refresh {
+                background: #2d9cdb;
+                color: #fff;
+                margin-left: 8px;
+            }
+
+        .row-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .meta {
+            color: #555;
+            font-size: 0.9rem;
+            margin-top: 6px;
+        }
+
+        .center {
+            text-align: center;
+            padding: 18px 0;
+            color: #666;
+        }
+
+        .error {
+            color: #b00020;
+            margin-top: 8px;
+        }
+
+        footer.site-footer {
+            margin-top: 28px;
+            padding: 12px 0;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #eee;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 650px) {
+            th, td {
+                padding: 8px 6px;
+                font-size: 0.95rem;
+            }
+
+            .row-actions {
+                gap: 6px;
+            }
+        }
+    </style>
+    <!-- React + ReactDOM (development UMD builds) and Babel for in-browser JSX transpile -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>Policies</h2>
+        <div id="root"></div>
+    </div>
+
+    <!-- App code -->
+    <script type="text/babel" src="app.jsx"></script>
+
+    <footer class="site-footer">
+        Developed By Siddartha Thirunahari
+    </footer>
+</body>
+</html>
