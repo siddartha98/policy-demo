@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using PolicyDemo.Data;
 using PolicyDemo.Domain;
+using PolicyDemo.Dtos;
 
 namespace PolicyDemo.Services
 {
@@ -12,40 +14,45 @@ namespace PolicyDemo.Services
     {
         private readonly AppDbContext _context;
         private readonly ILogger<PolicyService> _logger;
+        private readonly IMapper _mapper;
 
         // The constructor receives the DbContext via DI. The logger is declared for diagnostics.
-        public PolicyService(AppDbContext context, ILogger<PolicyService> logger)
+        public PolicyService(AppDbContext context, ILogger<PolicyService> logger, IMapper mapper)
         {
             _context = context;
             _logger = logger;
+            _mapper = mapper;
         }
 
         /// <summary>
         /// Retrieves policies from the database and orders them for UI consumption.
         /// Asynchronous and uses EF Core query operators.
         /// </summary>
-        public async Task<IEnumerable<Policy>> GetPoliciesAsync()
+        public async Task<IEnumerable<PolicyDto>> GetPoliciesAsync()
         {
             var policies = await _context.Policies
             .OrderBy(p => p.PolicyNumber)
             .ToListAsync();
 
-            return policies;
+            return _mapper.Map<IEnumerable<PolicyDto>>(policies);
         }
 
         /// <summary>
         /// Adds a new policy. Generates a new PolicyNumber and persists the entity.
         /// </summary>
-        public async Task<Policy> AddPolicyAsync(Policy newPolicy)
+        public async Task<PolicyDto> AddPolicyAsync(CreatePolicyDto newPolicyDto)
         {
-            if (newPolicy == null)
-                throw new ArgumentNullException(nameof(newPolicy));
+            if (newPolicyDto == null)
+                throw new ArgumentNullException(nameof(newPolicyDto));
 
-            if (string.IsNullOrWhiteSpace(newPolicy.CustomerName))
+            if (string.IsNullOrWhiteSpace(newPolicyDto.CustomerName))
                 throw new ArgumentException("Customer name is a required field.");
 
-            if (newPolicy.EndDate < newPolicy.StartDate)
+            if (newPolicyDto.EndDate < newPolicyDto.StartDate)
                 throw new ArgumentException("EndDate must be greater than StartDate.");
+
+            // Map DTO to domain/entity
+            var newPolicy = _mapper.Map<Policy>(newPolicyDto);
 
             // Assign a new PolicyNumber: if policies exist then max(existingPolicy) + 1,
             // or start at 1001 if none exist.
@@ -57,14 +64,14 @@ namespace PolicyDemo.Services
             _context.Policies.Add(newPolicy);
             await _context.SaveChangesAsync();
 
-            return newPolicy;
+            return _mapper.Map<PolicyDto>(newPolicy);
         }
 
         /// <summary>
         /// Performs validation, loads the policy, applies the domain Cancel operation,
         /// and persists changes. Throws meaningful exceptions for the controller to handle.
         /// </summary>
-        public async Task<Policy> CancelPolicyAsync(int policyNumber)
+        public async Task<PolicyDto> CancelPolicyAsync(int policyNumber)
         {
             if (policyNumber <= 0)
                 throw new ArgumentException("Invalid policy number.", nameof(policyNumber));
@@ -83,7 +90,7 @@ namespace PolicyDemo.Services
                 policy.Cancel(DateTime.UtcNow);
                 await _context.SaveChangesAsync();
 
-                return policy;
+                return _mapper.Map<PolicyDto>(policy);
             }
             catch (DbUpdateConcurrencyException ex)
             {

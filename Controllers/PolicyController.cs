@@ -1,6 +1,6 @@
 
 using Microsoft.AspNetCore.Mvc;
-using PolicyDemo.Domain;
+using PolicyDemo.Dtos;
 using PolicyDemo.Services;
 
 namespace PolicyDemo.Controllers;
@@ -44,7 +44,7 @@ public class PolicyController : ControllerBase
     /// Creates a new policy. The server will assign a PolicyNumber.
     /// </summary>
     [HttpPost]
-    public async Task<IActionResult> CreatePolicy([FromBody] Policy newPolicy)
+    public async Task<IActionResult> CreatePolicy([FromBody] CreatePolicyDto newPolicy)
     {
         try
         {

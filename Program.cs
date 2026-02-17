@@ -1,6 +1,6 @@
-
 using Microsoft.EntityFrameworkCore;
 using PolicyDemo.Data;
+using PolicyDemo.Mapping;
 using PolicyDemo.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +13,9 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Register AutoMapper and mapping profiles
+builder.Services.AddAutoMapper(typeof(PolicyProfile).Assembly);
 
 // Register application services for DI: the policy service implements business logic.
 // Scoped lifetime is appropriate for DbContext-backed services.
