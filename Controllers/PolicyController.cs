@@ -35,7 +35,7 @@ public class PolicyController : ControllerBase
         {
             // Log and return a BadRequest with the error message for simplicity.
             _logger.LogError(ex.Message);
-            return BadRequest(ex.Message);
+            return StatusCode(500, "An unexpected error occurred while retrieving policies.");
         }
     }
 
@@ -51,10 +51,20 @@ public class PolicyController : ControllerBase
             var result = await _policyService.AddPolicyAsync(newPolicy);
             return Created($"/api/policies/{result.PolicyNumber}", result);
         }
-        catch (Exception ex) 
+        catch (ArgumentNullException ex)
         {
-            _logger.LogError(ex.Message);
+            _logger.LogWarning(ex, "CreatePolicy called with null body.");
             return BadRequest(ex.Message);
+        }
+        catch (ArgumentException ex)
+        {
+            _logger.LogWarning(ex, "Invalid create policy request.");
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error creating policy.");
+            return StatusCode(500, "An unexpected error occurred while creating the policy.");
         }
     }
 
@@ -70,11 +80,25 @@ public class PolicyController : ControllerBase
             var result = await _policyService.CancelPolicyAsync(policyNumber);
             return Ok(result);
         }
+        catch (ArgumentException ex)
+        {
+            _logger.LogWarning(ex, "Invalid policy number supplied for cancellation.");
+            return BadRequest(ex.Message);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            _logger.LogWarning(ex, "Policy not found.");
+            return NotFound(ex.Message);
+        }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogWarning(ex, "Conflict while cancelling policy.");
+            return Conflict(ex.Message);
+        }
         catch (Exception ex)
         {
-            // Controller converts exceptions to client-friendly HTTP responses.
-            _logger.LogError(ex.Message);
-            return BadRequest(ex.Message);
+            _logger.LogError(ex, "Error cancelling policy.");
+            return StatusCode(500, "An unexpected error occurred while cancelling the policy.");
         }
     }
 }
