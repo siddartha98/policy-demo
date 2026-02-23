@@ -12,3 +12,5 @@ This README briefly describes the solution. The project demonstrates a minimal f
 The goal is to show API design, dependency injection, basic domain modeling, and simple UI integration without persistent storage.
 - If you wish to clone the repository and run the demo app. During application build, if you run into CS1061 error
 related to AddSwaggerGen, UseSwagger, and UseSwaggerUI - missing packages, then install NuGet package Swashbuckle.AspNetCore and rebuild.
+- Also, if your local environment does not already have, then install: Microsoft.EntityFrameworkCore.InMemory, AutoMapper, 
+and AutoMapper.Extensions.Microsoft.DependencyInjection.
