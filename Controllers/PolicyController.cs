@@ -6,6 +6,7 @@ using PolicyDemo.Services;
 namespace PolicyDemo.Controllers;
 
 [ApiController]
+// [Authorize] - would be added here if authentication/authorization is implemented for the controller.
 [Route("api/policies")]
 public class PolicyController : ControllerBase
 {
